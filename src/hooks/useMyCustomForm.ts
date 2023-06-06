@@ -1,7 +1,7 @@
 import { isEmail, isNotOnlyNumber, maxLength, minLength } from "@/utils/validate-util";
 import { useState } from "react";
 
-interface ICustomFormItem {
+export interface ICustomFormItem {
   name: string,
   type: 'text' | 'email' | 'password'
   validations: {type: ValidationType, value: string | number}[],
@@ -41,6 +41,10 @@ export const useMyCustomForm = (formsItems: ICustomFormItem[]) => {
       return {...fObj};
     });
   };
+
+  const resetFormObj = () => {
+    setFormObj(createFormObject(formsItems));
+  }
 
   const setField = (key: string, value: string): void => {
     setFormObj(fObj => {
@@ -104,5 +108,5 @@ export const useMyCustomForm = (formsItems: ICustomFormItem[]) => {
     }
   }
 
-  return {makeTouch, formObj, setField};
+  return {makeTouch, formObj, setField, resetFormObj};
 }
