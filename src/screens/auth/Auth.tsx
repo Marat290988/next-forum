@@ -3,37 +3,22 @@
 import React, { FC, useState, useEffect } from 'react';
 import styles from '@/screens/auth/Auth.module.scss';
 import { InputField } from '@/components/input-field/InputField';
-import { useForm } from 'react-hook-form';
-import { maxLength, minLength } from '@/utils/validate-util';
+import { useMyCustomForm } from '@/hooks/useMyCustomForm';
 
 export const Auth: FC = () => {
 
   const [isLogin, setIsLogin] = useState(true);
-  const {
-    register: formRegister, 
-    formState,
-    reset,
-    setError,
-    getFieldState,
-    getValues,
-    setValue,
-    control,
-    watch
-  } = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      name: '',
-      email: ''
-    },
-    shouldUnregister: false,
-  });
-  const inputValue = watch(['name', 'email']);
-
-  useEffect(() => {
-    console.log(inputValue)
-  }, [setError])
-
-  console.log(control._names)
+  const {makeTouch, formObj, setField} = useMyCustomForm([
+    {
+      name: 'name',
+      type: 'text',
+      validations: [
+        {type: 'min', value: 6},
+        {type: 'max', value: 20},
+        {type: 'notOnlyNumber', value: ''}
+      ]
+    }
+  ])
 
   return (
     <main
@@ -63,32 +48,10 @@ export const Auth: FC = () => {
           <InputField 
             title='Please enter your name'
             type='text'
-            error={formState.errors?.name}
-            {...formRegister('name', {
-              onChange(e: any) {
-                console.log(getFieldState('name'))
-                if (!minLength(6, e.target.value) && getFieldState('name').isTouched) {
-                  setError('name', {message: 'Minimum length 6 characters', type: 'focus'}, { shouldFocus: true });
-                  return;
-                }
-                if (!maxLength(20, e.target.value) && getFieldState('name').isTouched && !formState.errors?.name) {
-                  setError('name', {message: 'Max length 20 characters', type: 'focus'}, { shouldFocus: true });
-                  console.log(2)
-                  return;
-                }
-              },
-              onBlur(e: any) {
-                if (!minLength(6, e.target.value)) {
-                  setError('name', {message: 'Minimum length 6 characters', type: 'required'});
-                  return;
-                }
-                if (!maxLength(20, e.target.value)) {
-                  setError('name', {message: 'Max length 20 characters', type: 'required'});
-                  return;
-                }
-              },
-              
-            })}
+            errorMessage={formObj['name'].errorMessage}
+            name='name'
+            onChangeHandler={setField}
+            onBlurHandler={makeTouch}
           />
         </form>
       </div>
