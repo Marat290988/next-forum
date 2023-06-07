@@ -87,3 +87,8 @@ body {
 .border-color-light {
   border: 1px solid var(--light01);
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}

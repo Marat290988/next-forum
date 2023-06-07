@@ -1,48 +1,63 @@
 "use client";
 
+import { Login } from "@/components/auth/login/Login";
+import { Register } from "@/components/auth/register/Register";
 import { InputField } from "@/components/input-field/InputField";
 import { MyButton } from "@/components/ui/MyButton/MyButton";
-import { useMyCustomForm } from "@/hooks/useMyCustomForm";
+import { ICustomFormItem, useMyCustomForm } from "@/hooks/useMyCustomForm";
 import styles from "@/screens/auth/Auth.module.scss";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
+
+export interface IForm {
+  makeTouch: (key: string, value: string) => void;
+  formObj: {
+      [key: string]: ICustomFormItem;
+  };
+  setField: (key: string, value: string) => void;
+  resetFormObj: (rFormsItems: ICustomFormItem[]) => void;
+  isValidForm: boolean;
+}
+
+const loginData: ICustomFormItem[] = [
+  {
+    name: "email",
+    type: "email",
+    validations: [{ type: "isEmail", value: "" }],
+  },
+  {
+    name: "password",
+    type: "password",
+    validations: [
+      { type: "min", value: 6 },
+      { type: "max", value: 20 },
+      { type: "notOnlyNumber", value: "" },
+    ],
+  }
+]
+
+const registerData: ICustomFormItem = {
+  name: "name",
+  type: "text",
+  validations: [
+    { type: "min", value: 6 },
+    { type: "max", value: 20 },
+    { type: "notOnlyNumber", value: "" },
+  ]
+}
 
 export const Auth: FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { makeTouch, formObj, setField, resetFormObj } = useMyCustomForm([
-    {
-      name: "name",
-      type: "text",
-      validations: [
-        { type: "min", value: 6 },
-        { type: "max", value: 20 },
-        { type: "notOnlyNumber", value: "" },
-      ],
-    },
-    {
-      name: "email",
-      type: "email",
-      validations: [{ type: "isEmail", value: "" }],
-    },
-    {
-      name: "password",
-      type: "password",
-      validations: [
-        { type: "min", value: 6 },
-        { type: "max", value: 20 },
-        { type: "notOnlyNumber", value: "" },
-      ],
-    },
-  ]);
+  const { makeTouch, formObj, setField, resetFormObj, isValidForm } = useMyCustomForm(loginData);
 
   const setLogin = () => {
     setIsLogin(true); 
-    resetFormObj();
+    resetFormObj(loginData);
   }
 
   const setRegister = () => {
     setIsLogin(false); 
-    resetFormObj();
+    resetFormObj([...loginData, registerData]);
   }
 
   return (
@@ -67,57 +82,24 @@ export const Auth: FC = () => {
           </h3>
         </div>
 
-        {!isLogin && <form className="w-full p-[10px] flex flex-col items-center">
-          <InputField
-            title="Name"
-            type="text"
-            errorMessage={formObj["name"].errorMessage}
-            name="name"
-            onChangeHandler={setField}
-            onBlurHandler={makeTouch}
+        {isLogin && 
+          <Login
+            makeTouch={makeTouch}
+            formObj={formObj}
+            setField={setField}
+            resetFormObj={resetFormObj}
+            isValidForm={isValidForm}
           />
-          <InputField
-            title="Email"
-            type="email"
-            errorMessage={formObj["email"].errorMessage}
-            name="email"
-            onChangeHandler={setField}
-            onBlurHandler={makeTouch}
+        }
+        {!isLogin && 
+          <Register 
+            makeTouch={makeTouch}
+            formObj={formObj}
+            setField={setField}
+            resetFormObj={resetFormObj}
+            isValidForm={isValidForm}
           />
-          <InputField
-            title="Password"
-            type="password"
-            errorMessage={formObj["password"].errorMessage}
-            name="password"
-            onChangeHandler={setField}
-            onBlurHandler={makeTouch}
-          />
-        </form>}
-        {isLogin && <form className="w-full p-[10px] flex flex-col items-center">
-          <InputField
-            title="Email"
-            type="email"
-            errorMessage={formObj["email"].errorMessage}
-            name="email"
-            onChangeHandler={setField}
-            onBlurHandler={makeTouch}
-          />
-          <InputField
-            title="Password"
-            type="password"
-            errorMessage={formObj["password"].errorMessage}
-            name="password"
-            onChangeHandler={setField}
-            onBlurHandler={makeTouch}
-          />
-          <MyButton
-            buttonClick={(e) => {e.preventDefault(); setIsLoading(ld => !ld)}}
-            type='submit'
-            isLoading={isLoading}
-          >
-            LOGIN
-          </MyButton>
-        </form>}
+        }
       </div>
     </main>
   );
