@@ -5,7 +5,7 @@ export class AuthService {
     const response = await axiosReq({
       url: '/auth',
       method: 'POST',
-      data: data
+      data
     });
     return response.data;
   }
