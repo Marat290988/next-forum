@@ -1,4 +1,5 @@
-import './globals.scss'
+import './globals.scss';
+import './ReactToastify.scss';
 
 export const metadata = {
   title: 'Next Forum',

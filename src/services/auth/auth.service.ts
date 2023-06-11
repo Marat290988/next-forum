@@ -9,4 +9,13 @@ export class AuthService {
     });
     return response.data;
   }
+
+  static async login(data: any) {
+    const response = await axiosReq({
+      url: '/login',
+      method: 'POST',
+      data
+    });
+    return response.data;
+  }
 }

@@ -35,9 +35,9 @@ export async function POST(
       }
     });
   } catch (e) {
-    return NextResponse.json({message: 'Problems with DB.'}, {status: 500});
+    return NextResponse.json({message: 'Problems with DB.'}, {status: 422});
   }
 
 
-  return NextResponse.json(user, {status: 200});
+  return NextResponse.json({message: 'User has been created.'}, {status: 200});
 }

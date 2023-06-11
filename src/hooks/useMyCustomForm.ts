@@ -32,7 +32,7 @@ const createFormObject = (formsItems: ICustomFormItem[]): {[key: string]: ICusto
 type ValidationType = 'min' | 'max' | 'isEmail' | 'notOnlyNumber';
 
 export const useMyCustomForm = (formsItems: ICustomFormItem[]) => {
-  const [formObj, setFormObj] = useState(createFormObject(formsItems));
+  const [formObj, setFormObj] = useState({...createFormObject(formsItems)});
   const [isValidForm, setIsValidForm] = useState(false);
 
   const makeTouch = (key: string, value: string): void => {

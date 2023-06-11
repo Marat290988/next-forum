@@ -8,12 +8,13 @@ interface IInputField {
   name: string,
   onChangeHandler: (key: string, value: string) => void,
   onBlurHandler: (key: string, value: string) => void,
-  isTouch?: boolean
+  isTouch?: boolean,
+  value: string | undefined
 }
 
 export const InputField = forwardRef<HTMLInputElement, IInputField>(
   (props, ref) => {
-    const {title, type, errorMessage, name, onChangeHandler, onBlurHandler, isTouch = true} = props;
+    const {title, type, errorMessage, name, onChangeHandler, onBlurHandler, isTouch = true, value} = props;
     return (
       <div
         className='w-full max-w-[400px]'
@@ -30,6 +31,7 @@ export const InputField = forwardRef<HTMLInputElement, IInputField>(
           name={name}
           onChange={(e) => {onChangeHandler(name, e.target.value)}}
           onBlur={(e) => onBlurHandler(name, e.target.value)}
+          value={value}
         />
         <div style={{minHeight: '18px'}}>
           {errorMessage && isTouch && <p className={`${styles['error']}`}>{errorMessage}</p>}
