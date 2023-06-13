@@ -1,5 +1,7 @@
-import {sign} from 'jsonwebtoken';
+import {sign, decode} from 'jsonwebtoken';
 import {JwtPayload, verify as jVerify} from 'jsonwebtoken';
+import Cookies from 'js-cookie';
+import IUser from './../interface/user.interface';
 
 export const signJwt = (
   payload: { sub: string },
@@ -19,5 +21,15 @@ export const verifyJWT = (
     return false;
   } else {
     return true;
+  }
+}
+
+export const decodeToken = () => {
+  const token = Cookies.get('token') as string;
+  if (token) {
+    const decodeToken: any = decode(token);
+    return JSON.parse(decodeToken.data);
+  } else {
+    return undefined;
   }
 }
