@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     const tokenMaxAge = (new Date().getTime()); // 1 week
 
-    const token: string = signJwt(
+    const token: string = await signJwt(
       { sub: JSON.stringify(resUser) },
       { exp: `7d` }
     );

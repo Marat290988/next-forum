@@ -1,5 +1,5 @@
 import { Auth } from "@/screens/auth/Auth";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation';
 import { verifyJWT } from '@/utils/token';
@@ -9,15 +9,13 @@ export const metadata = {
   description: 'A place for an exchange of views.',
 }
 
-const AuthPage: NextPage = async () => {
+export default function AuthPage() {
   const cookieStore = cookies();
   const token = cookieStore.get('token');
-  if (token && verifyJWT(token!.value)) {
+  if (token && token.value) {
     redirect('/');
   }
   return (
     <Auth />
   )
 }
-
-export default AuthPage;

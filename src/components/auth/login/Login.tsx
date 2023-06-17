@@ -24,6 +24,7 @@ export const Login: FC<IForm & { setLogin: () => void }> = ({
     });
     try {
       const response = await AuthService.login(JSON.stringify(loginData));
+      console.log(response)
       toast.success(response.message);
       setLogin();
       router.replace('/');
