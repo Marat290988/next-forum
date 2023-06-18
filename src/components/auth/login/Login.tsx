@@ -1,5 +1,6 @@
 import { InputField } from "@/components/input-field/InputField";
 import { MyButton } from "@/components/ui/MyButton/MyButton";
+import { useActions } from "@/hooks/useActions";
 import { IForm } from "@/screens/auth/Auth";
 import { AuthService } from "@/services/auth/auth.service";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,7 @@ export const Login: FC<IForm & { setLogin: () => void }> = ({
   isValidForm,
   setLogin,
 }) => {
+  const { setUser } = useActions();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const login = async (e: FormEvent<HTMLFormElement>) => {
@@ -24,7 +26,7 @@ export const Login: FC<IForm & { setLogin: () => void }> = ({
     });
     try {
       const response = await AuthService.login(JSON.stringify(loginData));
-      console.log(response)
+      setUser(response.user);
       toast.success(response.message);
       setLogin();
       router.replace('/');

@@ -1,24 +1,22 @@
 import IUser from './../../interface/user.interface';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { decodeToken } from './../../utils/token';
-import { login } from './user.actions';
+import Cookies from 'js-cookie';
 
-const initialState: {user: IUser | undefined, isLoading: boolean} = {
-  user: decodeToken(),
-  isLoading: false
+const initialState: {user: IUser | undefined | null} = {
+  user: decodeToken()
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(login.pending, state =>{
-      state.isLoading = true
-    })
-    .addCase(login.fulfilled, (state, action) => {
-      state.isLoading = false;
+  reducers: {
+    setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
-    })
-  }
+    },
+    logout: (state) => {
+      state.user = null;
+      Cookies.remove('token');
+    }
+  },
 })

@@ -1,14 +1,10 @@
-import {sign, decode} from 'jsonwebtoken';
-import {JwtPayload, verify as jVerify} from 'jsonwebtoken';
 import Cookies from 'js-cookie';
-import IUser from './../interface/user.interface';
 import * as jose from 'jose';
 
 export const signJwt = async (
   payload: { sub: string },
   options: { exp: string }
 ) => {
-  console.log(process.env.SECRET)
   const jwt = await new jose.SignJWT(payload)
     .setProtectedHeader({alg: 'HS256'})
     .setExpirationTime(options.exp)
@@ -42,9 +38,9 @@ export const fff = async (token: any) => {
 export const decodeToken = () => {
   const token = Cookies.get('token') as string;
   if (token) {
-    const decodeToken: any = decode(token);
-    return JSON.parse(decodeToken.data);
+    const decodeToken: any = jose.decodeJwt(token);
+    return JSON.parse(decodeToken.sub);
   } else {
-    return undefined;
+    return {};
   }
 }

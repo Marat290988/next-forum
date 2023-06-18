@@ -6,8 +6,10 @@ export async function middleware (req: NextRequest) {
   if (token) {
     try {
       await verifyJWT(token);
+    } catch(e) {
       const response = NextResponse.next();
-      response.cookies.delete('token');
-    } catch(e) {}
+      response.cookies.set('token', '');
+      return response;
+    }
   }
 }

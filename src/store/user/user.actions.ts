@@ -14,8 +14,8 @@ export const register = createAsyncThunk<{message: string}, IUser>(
   }
 )
 
-export const login = createAsyncThunk<IUser, IUser>(
-  'register',
+export const login = createAsyncThunk<{user: IUser, message: string}, IUser>(
+  'login',
   async (data, thunkApi) => {
     try {
       const response = await AuthService.login(JSON.stringify(data));
